@@ -1,0 +1,64 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "manu",
+      "email": "alice.johnson@example.com",
+      "role": "customer"
+    },
+    {
+      "id": 2,
+      "name": "Bob Smith",
+      "email": "bob.smith@example.com",
+      "role": "admin"
+    }
+  ],
+  "products": [
+    {
+      "id": 101,
+      "name": "Wireless Mouse",
+      "price": 19.99,
+      "category": "Electronics"
+    },
+    {
+      "id": 102,
+      "name": "Mechanical Keyboard",
+      "price": 89.99,
+      "category": "Electronics"
+    },
+    {
+      "id": 103,
+      "name": "Notebook",
+      "price": 9.99,
+      "category": "Stationery"
+    }
+  ],
+  "orders": [
+    {
+      "id": 501,
+      "userId": 1,
+      "items": [
+        {
+          "productId": 101,
+          "quantity": 2
+        },
+        {
+          "productId": 103,
+          "quantity": 5
+        }
+      ],
+      "totalAmount": 69.93
+    },
+    {
+      "id": 502,
+      "userId": 2,
+      "items": [
+        {
+          "productId": 102,
+          "quantity": 1
+        }
+      ],
+      "totalAmount": 89.99
+    }
+  ]
+}
