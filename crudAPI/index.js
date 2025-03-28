@@ -58,6 +58,21 @@ app.get('/forgot-password', (req, res) => {
   res.sendFile(filePath);  // Sends the loginTemplate.html file to the client
 });
 
+app.get('/terms', (req, res) => {
+  const filePath = path.join(__dirname, 'htmlTemplate', 'termOfUseTemplate.html');
+  res.sendFile(filePath);  // Sends the loginTemplate.html file to the client
+});
+
+app.get('/privacy', (req, res) => {
+  const filePath = path.join(__dirname, 'htmlTemplate', 'privacyTemplate.html');
+  res.sendFile(filePath);  // Sends the loginTemplate.html file to the client
+});
+
+app.get('/contact', (req, res) => {
+  const filePath = path.join(__dirname, 'htmlTemplate', 'contactusTemplate.html');
+  res.sendFile(filePath);  // Sends the loginTemplate.html file to the client
+});
+
 app.post('/forgot-password', async (req, res)=>{
   try{
     const {email} = req.body;
