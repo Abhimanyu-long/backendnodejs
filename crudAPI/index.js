@@ -53,6 +53,11 @@ app.get('/register', (req, res) => {
   res.sendFile(filePath);  // Sends the loginTemplate.html file to the client
 });
 
+app.get('/forgot-password', (req, res) => {
+  const filePath = path.join(__dirname, 'htmlTemplate', 'forgotPasswordTemplate.html');
+  res.sendFile(filePath);  // Sends the loginTemplate.html file to the client
+});
+
 app.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
