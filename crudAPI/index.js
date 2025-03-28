@@ -84,10 +84,10 @@ app.get('/contact', (req, res) => {
   res.sendFile(filePath);  // Sends the loginTemplate.html file to the client
 });
 
-app.get('/admin', (req, res)=>{
-  const filePath = path.join(__dirname, 'htmlTemplate', 'adminTemplate.html');
-  res.sendFile(filePath)
-})
+// app.get('/admin', (req, res)=>{
+//   const filePath = path.join(__dirname, 'htmlTemplate', 'adminTemplate.html');
+//   res.sendFile(filePath)
+// })
 
 app.post('/forgot-password', async (req, res)=>{
   try{
