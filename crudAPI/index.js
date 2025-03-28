@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import User from './Schema/userSchema.js';
+import Contact from './Schema/contactSchema.js';
 
 // Load environment variables from .env
 dotenv.config();
@@ -139,7 +140,31 @@ app.post('/login', async (req, res) => {
   }
 });
 
+app.post('/contact', async (req, res)=>{
+  try{
+    const {name, email, message} = req.body;
+    const newMessage = new Contact ({
+      name,
+      email,
+      message
+    });
+
+    // Save the contact to the database
+    const contactus= await newMessage.save();
+    res.status(201).json({ message: `Will contact you ASAP ${contactus}` });
+  }catch(error){
+    res.status(500).json({message: error.message});
+  }
+})
+
 // Start the server
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+
+
+
+
+
+// smtp server for template  email
