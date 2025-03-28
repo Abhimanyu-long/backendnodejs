@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import session from 'express-session';
 import { dirname } from 'path';
 import User from './Schema/userSchema.js';
 import Contact from './Schema/contactSchema.js';
@@ -32,10 +33,19 @@ const port = 4000;
 // Body parser middleware to parse POST request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'SDFSDGDDGDGS',  // Use a strong secret key
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }  // If using HTTPS, set `secure: true`
+}));
 
 // Get the directory name of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); // Ensure views are in the correct folder
 
 // Set up views directory (if you're using a view engine like EJS)
 app.set('views', path.join(__dirname, 'views'));
@@ -73,6 +83,11 @@ app.get('/contact', (req, res) => {
   const filePath = path.join(__dirname, 'htmlTemplate', 'contactusTemplate.html');
   res.sendFile(filePath);  // Sends the loginTemplate.html file to the client
 });
+
+app.get('/admin', (req, res)=>{
+  const filePath = path.join(__dirname, 'htmlTemplate', 'adminTemplate.html');
+  res.sendFile(filePath)
+})
 
 app.post('/forgot-password', async (req, res)=>{
   try{
@@ -132,8 +147,12 @@ app.post('/login', async (req, res) => {
     if (existingUser.password !== password) {
       return res.status(400).json({ message: "Login failed. Incorrect password." });
     }
-    // If login is successful, send a success response
-    res.status(200).send("Login successful");
+    // If login is successful, save the user data in session
+    req.session.user = existingUser;  // Store user in session
+    console.log("Session after login: ", req.session);
+    // Redirect to the admin page
+    res.redirect('/admin');
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
@@ -157,10 +176,40 @@ app.post('/contact', async (req, res)=>{
   }
 })
 
+app.get('/admin', async (req, res) => {
+  console.log("req.session =====> ", req.session);
+  try {
+    // Check if the user is logged in (i.e., session contains user data)
+    if (!req.session.user) {
+      return res.redirect('/login');  // Redirect to login page if not authenticated
+    }
+
+    // Fetch all users and contact messages from the database
+    const users = await User.find();
+    const contactMessages = await Contact.find();
+
+    // Render the admin page with the users and contact messages
+    res.render('adminTemplate', { users, contactMessages });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
+
+
+
+
+
+
+
+
+
 
 
 
