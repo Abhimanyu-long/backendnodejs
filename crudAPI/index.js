@@ -58,6 +58,23 @@ app.get('/forgot-password', (req, res) => {
   res.sendFile(filePath);  // Sends the loginTemplate.html file to the client
 });
 
+app.post('/forgot-password', async (req, res)=>{
+  try{
+    const {email} = req.body;
+
+    const existingUserEmail = await User.find({email:email});
+
+    if(!existingUserEmail){
+      res.status(400).json({message: "invalid email"});
+    }
+
+    res.status(200).json({message: "New Password have been send to you register email"});
+
+  }catch(error){
+    res.status(500).json({message: error.message});
+  }
+})
+
 app.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
