@@ -44,8 +44,8 @@ app.use(session({
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views')); // Ensure views are in the correct folder
 
 // Set up views directory (if you're using a view engine like EJS)
 app.set('views', path.join(__dirname, 'views'));
@@ -181,7 +181,7 @@ app.get('/admin', async (req, res) => {
   try {
     // Check if the user is logged in (i.e., session contains user data)
     if (!req.session.user) {
-      return res.redirect('/login');  // Redirect to login page if not authenticated
+      return res.redirect('/');  // Redirect to login page if not authenticated
     }
 
     // Fetch all users and contact messages from the database
@@ -195,6 +195,15 @@ app.get('/admin', async (req, res) => {
     console.error(error);
     res.status(500).json({ message: error.message });
   }
+});
+
+app.get('/logout', (req, res)=>{
+  req.session.destroy((error)=>{
+    if(error){
+      return res.status(500).send("Error logging out.");
+    }
+    res.redirect('/');
+  });
 });
 
 // Start the server
